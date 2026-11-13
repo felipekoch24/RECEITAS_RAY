@@ -1,0 +1,395 @@
+l<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CADERNO DE RECEITAS DA RAYSSA 🌸</title>
+
+    <!-- PWA / Ícones -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#fbcfe8">
+    <link rel="icon" type="image/png" href="icon.png">
+    
+    <!-- Estilos CSS: Modo Visão Máxima para a Chef -->
+    <style>
+        :root {
+            --bg-mesa: #fde2e4; 
+            --capa-livro: #db2777; 
+            --borda-livro: #9d174d;
+            --papel-linha: #fbcfe8; 
+            --papel-fundo: #ffffff; 
+            --texto-principal: #4a1535;
+            --rosa-botao: #ec4899;
+            --sombra-livro: 0 30px 60px rgba(157, 23, 77, 0.35);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background: var(--bg-mesa);
+            color: var(--texto-principal); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 5px; 
+            overflow-x: hidden; 
+        }
+
+        /* Estrutura do Livro / Caderno */
+        .livro-container {
+            width: 100%;
+            max-width: 1450px;
+            height: 90vh;
+            background: var(--capa-livro);
+            border-radius: 20px;
+            box-shadow: var(--sombra-livro);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 8px solid var(--borda-livro);
+            border-top: 18px solid #831843;
+        }
+
+        /* Páginas Duplas Abertas */
+        .livro-paginas {
+            flex: 1;
+            background: var(--papel-fundo);
+            margin: 12px 12px 0 12px;
+            border-radius: 14px 14px 0 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            padding: 40px 50px;
+            box-shadow: inset 0 0 25px rgba(219, 39, 119, 0.06);
+            position: relative;
+            overflow-y: auto;
+        }
+
+        /* Divisória central das páginas */
+        .livro-paginas::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            background: linear-gradient(to right, rgba(0,0,0,0.05), rgba(219,39,119,0.15), rgba(0,0,0,0.05));
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .pagina-secao {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .pagina-secao.active {
+            display: flex;
+        }
+
+        /* CABEÇALHOS GIGANTES */
+        h2 {
+            font-size: 32px;
+            color: #be185d;
+            margin-bottom: 20px;
+            border-bottom: 4px dashed #f472b6;
+            padding-bottom: 12px;
+            font-weight: 900;
+        }
+
+        label {
+            font-size: 20px;
+            color: #be185d;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: bold;
+        }
+
+        input {
+            background: #fff;
+            border: 3px solid #f472b6;
+            color: #222;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 22px; /* Título bem grandão */
+            margin-bottom: 18px;
+            width: 100%;
+            outline: none;
+            font-weight: bold;
+        }
+        input:focus { border-color: var(--rosa-botao); box-shadow: 0 0 12px rgba(236,72,153,0.5); }
+
+        /* --- LINHAS DE CADERNO COM LETRA BEM GRANDE --- */
+        .caderno-linhas {
+            background-color: #fff;
+            background-image: linear-gradient(var(--papel-linha) 1px, transparent 1px);
+            background-size: 100% 45px; /* Linhas super espaçadas */
+            line-height: 45px;         
+            border: 3px solid #f472b6;
+            color: #111;
+            padding: 6px 18px;
+            border-radius: 12px;
+            font-size: 22px; /* Letra GIGANTE para digitação confortável */
+            resize: none;
+            width: 100%;
+            outline: none;
+            flex: 1;
+        }
+        .caderno-linhas:focus { border-color: var(--rosa-botao); }
+
+        button {
+            background: var(--rosa-botao);
+            color: #fff;
+            border: none;
+            padding: 18px 28px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 20px; /* Botões grandes */
+            cursor: pointer;
+            box-shadow: 0 5px 12px rgba(236,72,153,0.45);
+            transition: all 0.2s;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Cards de Receitas Salvas GIGANTES */
+        .receita-card {
+            background: #fff;
+            border: 3px solid #fbcfe8;
+            border-left: 12px solid var(--rosa-botao);
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            font-size: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+        }
+
+        /* ABAS NA PARTE INFERIOR GIGANTES */
+        .livro-abas-inferior {
+            height: 85px;
+            background: var(--capa-livro);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 0 25px;
+            border-radius: 0 0 20px 20px;
+            border-top: 4px solid var(--borda-livro);
+        }
+
+        .aba-btn {
+            background: #9d174d;
+            color: #fbcfe8;
+            border: 3px solid #be185d;
+            padding: 14px 45px;
+            border-radius: 35px;
+            font-size: 22px; /* Abas de baixo gigantes para o dedo */
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .aba-btn.active {
+            background: #ffffff;
+            color: #9d174d;
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.8);
+            transform: translateY(-3px);
+        }
+
+        /* Checkbox do Checklist GIGANTE */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 20px; /* Texto do checklist grandão */
+            margin-bottom: 12px;
+        }
+        .checklist-item input[type="checkbox"] {
+            width: 30px; /* Caixa de marcar GIGANTE */
+            height: 30px;
+            accent-color: var(--rosa-botao);
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .livro-container { height: 94vh; }
+            .livro-paginas { grid-template-columns: 1fr; gap: 30px; }
+            .livro-paginas::after { display: none; }
+            .aba-btn { padding: 12px 25px; font-size: 18px; }
+            h2 { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="livro-container">
+    
+    <!-- PÁGINAS DO LIVRO ABERTAS -->
+    <div class="livro-paginas">
+
+        <!-- ABA 1: NOVA RECEITA -->
+        <div id="pagina-nova-esq" class="pagina-secao active">
+            <h2>👩‍🍳 Escrever Nova Receita</h2>
+            <input type="text" id="receita-titulo" placeholder="Nome do Prato (Ex: Strogonoff da Chef)">
+            
+            <label>Checklist de Ingredientes (Escreva um por linha):</label>
+            <textarea id="receita-ingredientes" class="caderno-linhas" style="height: 250px;" placeholder="- 2 xícaras de trigo&#10;- 3 ovos&#10;- Sal a gosto..."></textarea>
+            
+            <button style="width: 100%; margin-top: 18px;" onclick="addReceita()">✨ Salvar Receita no Livro</button>
+        </div>
+
+        <div id="pagina-nova-dir" class="pagina-secao active">
+            <h2>📖 Modo de Preparo</h2>
+            <label>Passo a Passo Detalhado:</label>
+            <textarea id="receita-modo" class="caderno-linhas" style="height: 400px;" placeholder="Escreva o passo a passo bem grande nas linhas..."></textarea>
+        </div>
+
+        <!-- ABA 2: MEU LIVRO DE RECEITAS SALVAS -->
+        <div id="pagina-salvas-esq" class="pagina-secao">
+            <h2>📜 Livro de Receitas Salvas</h2>
+            <div id="container-receitas" style="max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
+        </div>
+
+        <div id="pagina-salvas-dir" class="pagina-secao">
+            <h2>🌸 Anotações & Segredos da Chef</h2>
+            <label>Página de Rascunho Livre:</label>
+            <textarea class="caderno-linhas" style="height: 400px;" placeholder="Anote dicas extras, temperatura do forno, truques..."></textarea>
+        </div>
+
+    </div>
+
+    <!-- ABAS NA PARTE INFERIOR GIGANTES -->
+    <nav class="livro-abas-inferior">
+        <button class="aba-btn active" onclick="trocarPagina('nova-esq', 'nova-dir', event)">✍️ Escrever Receita</button>
+        <button class="aba-btn" onclick="trocarPagina('salvas-esq', 'salvas-dir', event)">📖 Meu Livro (Salvas)</button>
+    </nav>
+
+</div>
+
+<!-- Script de Funcionamento -->
+<script>
+    function trocarPagina(secaoEsquerda, secaoDireita, evt) {
+        document.querySelectorAll('.pagina-secao').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(`pagina-${secaoEsquerda}`).classList.add('active');
+        document.getElementById(`pagina-${secaoDireita}`).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    let receitasData = JSON.parse(localStorage.getItem('central_receitas')) || [];
+
+    function addReceita() {
+        const titulo = document.getElementById('receita-titulo').value.trim();
+        const ingredientes = document.getElementById('receita-ingredientes').value.trim();
+        const modo = document.getElementById('receita-modo').value.trim();
+        
+        if (!titulo) {
+            alert("Preencha o nome da receita, Chef!");
+            return;
+        }
+
+        receitasData.push({ id: Date.now(), titulo, ingredientes, modo });
+        
+        document.getElementById('receita-titulo').value = '';
+        document.getElementById('receita-ingredientes').value = '';
+        document.getElementById('receita-modo').value = '';
+        
+        salvarReceitas();
+        alert("Receita guardada no livro com sucesso! 🌸");
+    }
+
+    function salvarReceitas() {
+        localStorage.setItem('central_receitas', JSON.stringify(receitasData));
+        renderReceitas();
+    }
+
+    function delReceita(id) {
+        if (confirm("Deseja apagar esta receita do caderno?")) {
+            receitasData = receitasData.filter(r => r.id !== id);
+            salvarReceitas();
+        }
+    }
+
+    function habilitarEdicaoReceita(id) {
+        const cardEl = document.getElementById(`receita-card-${id}`);
+        const r = receitasData.find(item => item.id === id);
+        if (!r || !cardEl) return;
+
+        cardEl.innerHTML = `
+            <label style="font-size: 18px; color: #be185d;">Editar Título:</label>
+            <input type="text" id="edit-titulo-${id}" value="${r.titulo}" style="margin-bottom: 12px; font-size: 20px;">
+            
+            <label style="font-size: 18px; color: #be185d;">Editar Ingredientes (Checklist):</label>
+            <textarea id="edit-ingredientes-${id}" class="caderno-linhas" style="height: 160px; margin-bottom: 12px; font-size: 20px;">${r.ingredientes}</textarea>
+            
+            <label style="font-size: 18px; color: #be185d;">Editar Modo de Preparo:</label>
+            <textarea id="edit-modo-${id}" class="caderno-linhas" style="height: 200px; margin-bottom: 18px; font-size: 20px;">${r.modo}</textarea>
+            
+            <div style="display: flex; gap: 15px;">
+                <button style="background: #10b981; flex: 1; font-size: 18px; padding: 16px;" onclick="salvarEdicaoReceita(${id})">💾 Salvar Alterações</button>
+                <button style="background: #6b7280; flex: 1; font-size: 18px; padding: 16px;" onclick="renderReceitas()">Cancelar</button>
+            </div>
+        `;
+    }
+
+    function salvarEdicaoReceita(id) {
+        const novoTitulo = document.getElementById(`edit-titulo-${id}`).value.trim();
+        const novosIngredientes = document.getElementById(`edit-ingredientes-${id}`).value.trim();
+        const novoModo = document.getElementById(`edit-modo-${id}`).value.trim();
+
+        if (!novoTitulo) {
+            alert("O nome da receita não pode ficar vazio!");
+            return;
+        }
+
+        const r = receitasData.find(item => item.id === id);
+        if (r) {
+            r.titulo = novoTitulo;
+            r.ingredientes = novosIngredientes;
+            r.modo = novoModo;
+            salvarReceitas();
+        }
+    }
+
+    function renderReceitas() {
+        const container = document.getElementById('container-receitas');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (receitasData.length === 0) {
+            container.innerHTML = '<p style="font-size:18px; color:#888; font-style:italic;">Nenhuma receita no livro ainda. Escreva na aba ao lado!</p>';
+            return;
+        }
+
+        receitasData.forEach(r => {
+            let linhasIng = r.ingredientes.split('\n').map(linha => {
+                if (!linha.trim()) return '';
+                return `<div class="checklist-item"><input type="checkbox"> <span>${linha.replace(/^[-*]\s*/, '')}</span></div>`;
+            }).join('');
+
+            container.innerHTML += `
+                <div class="receita-card" id="receita-card-${r.id}">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center;">
+                        <b style="color:#be185d; font-size:24px;">${r.titulo}</b>
+                        <div style="display:flex; gap: 15px;">
+                            <button style="background:none; color:#2563eb; padding:0; font-size:17px; box-shadow:none; font-weight:bold;" onclick="habilitarEdicaoReceita(${r.id})">✏️ Editar</button>
+                            <button style="background:none; color:#ef4444; padding:0; font-size:17px; box-shadow:none; font-weight:bold;" onclick="delReceita(${r.id})">🗑️ Apagar</button>
+                        </div>
+                    </div>
+                    <div style="font-size:19px; color:#444; margin-bottom:15px;"><strong>Ingredientes (Checklist):</strong><div style="margin-top:8px;">${linhasIng}</div></div>
+                    <div style="font-size:19px; color:#333; white-space: pre-wrap; background:#fdf2f8; padding:16px; border-radius:10px;"><strong>Preparo:</strong><br>${r.modo}</div>
+                </div>
+            `;
+        });
+    }
+
+    renderReceitas();
+</script>
+</body>
+</html>
