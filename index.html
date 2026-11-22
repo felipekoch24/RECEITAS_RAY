@@ -1,4 +1,4 @@
-l<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -114,7 +114,7 @@ l<!DOCTYPE html>
             color: #222;
             padding: 16px 20px;
             border-radius: 12px;
-            font-size: 22px; /* Título bem grandão */
+            font-size: 22px;
             margin-bottom: 18px;
             width: 100%;
             outline: none;
@@ -126,13 +126,13 @@ l<!DOCTYPE html>
         .caderno-linhas {
             background-color: #fff;
             background-image: linear-gradient(var(--papel-linha) 1px, transparent 1px);
-            background-size: 100% 45px; /* Linhas super espaçadas */
+            background-size: 100% 45px;
             line-height: 45px;         
             border: 3px solid #f472b6;
             color: #111;
             padding: 6px 18px;
             border-radius: 12px;
-            font-size: 22px; /* Letra GIGANTE para digitação confortável */
+            font-size: 22px;
             resize: none;
             width: 100%;
             outline: none;
@@ -147,7 +147,7 @@ l<!DOCTYPE html>
             padding: 18px 28px;
             border-radius: 12px;
             font-weight: bold;
-            font-size: 20px; /* Botões grandes */
+            font-size: 20px;
             cursor: pointer;
             box-shadow: 0 5px 12px rgba(236,72,153,0.45);
             transition: all 0.2s;
@@ -166,6 +166,26 @@ l<!DOCTYPE html>
             box-shadow: 0 6px 12px rgba(0,0,0,0.06);
         }
 
+        /* Cards da Wishlist */
+        .wish-card {
+            background: #fff;
+            border: 3px solid #fbcfe8;
+            border-left: 12px solid #db2777;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .wish-comprado {
+            opacity: 0.65;
+            background: #fdf2f8;
+        }
+        .wish-comprado .wish-nome {
+            text-decoration: line-through;
+            color: #888;
+        }
+
         /* ABAS NA PARTE INFERIOR GIGANTES */
         .livro-abas-inferior {
             height: 85px;
@@ -173,19 +193,20 @@ l<!DOCTYPE html>
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px;
+            gap: 20px;
             padding: 0 25px;
             border-radius: 0 0 20px 20px;
             border-top: 4px solid var(--borda-livro);
+            flex-wrap: wrap;
         }
 
         .aba-btn {
             background: #9d174d;
             color: #fbcfe8;
             border: 3px solid #be185d;
-            padding: 14px 45px;
+            padding: 14px 35px;
             border-radius: 35px;
-            font-size: 22px; /* Abas de baixo gigantes para o dedo */
+            font-size: 21px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
@@ -204,11 +225,11 @@ l<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 15px;
-            font-size: 20px; /* Texto do checklist grandão */
+            font-size: 20px;
             margin-bottom: 12px;
         }
         .checklist-item input[type="checkbox"] {
-            width: 30px; /* Caixa de marcar GIGANTE */
+            width: 30px;
             height: 30px;
             accent-color: var(--rosa-botao);
             margin: 0;
@@ -220,7 +241,8 @@ l<!DOCTYPE html>
             .livro-container { height: 94vh; }
             .livro-paginas { grid-template-columns: 1fr; gap: 30px; }
             .livro-paginas::after { display: none; }
-            .aba-btn { padding: 12px 25px; font-size: 18px; }
+            .livro-abas-inferior { height: auto; padding: 10px; gap: 12px; }
+            .aba-btn { padding: 12px 22px; font-size: 18px; }
             h2 { font-size: 26px; }
         }
     </style>
@@ -258,7 +280,31 @@ l<!DOCTYPE html>
         <div id="pagina-salvas-dir" class="pagina-secao">
             <h2>🌸 Anotações & Segredos da Chef</h2>
             <label>Página de Rascunho Livre:</label>
-            <textarea class="caderno-linhas" style="height: 400px;" placeholder="Anote dicas extras, temperatura do forno, truques..."></textarea>
+            <textarea id="anotacoes-chef" class="caderno-linhas" style="height: 400px;" placeholder="Anote dicas extras, temperatura do forno, truques..." oninput="salvarAnotacoesChef()"></textarea>
+        </div>
+
+        <!-- ABA 3: WISHLIST DA BLOGUEIRA -->
+        <div id="pagina-wish-esq" class="pagina-secao">
+            <h2>🛍️ Nova Wish (Lista de Desejos)</h2>
+            <label>O que você quer comprar?</label>
+            <input type="text" id="wish-nome" placeholder="Ex: Air Fryer Rosa / Perfume / Bolsa">
+
+            <label>Valor aproximado (estilo banco):</label>
+            <input type="text" id="wish-valor" value="R$ 0,00" oninput="formatarMoedaInput(this)">
+
+            <label>Loja ou Observação (opcional):</label>
+            <input type="text" id="wish-obs" placeholder="Ex: Shopee, Amazon, cor lilás...">
+
+            <button style="width: 100%; margin-top: 10px;" onclick="addWish()">💖 Colocar na Wishlist</button>
+        </div>
+
+        <div id="pagina-wish-dir" class="pagina-secao">
+            <h2>✨ Minha Wishlist Salva</h2>
+            <div style="background: #fdf2f8; border: 2px solid #f472b6; border-radius: 12px; padding: 14px; margin-bottom: 16px; font-size: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <span><strong>Total da Wishlist:</strong></span>
+                <strong id="wish-total" style="color: #be185d; font-size: 24px;">R$ 0,00</strong>
+            </div>
+            <div id="container-wish" style="max-height: 410px; overflow-y: auto; padding-right: 10px;"></div>
         </div>
 
     </div>
@@ -267,6 +313,7 @@ l<!DOCTYPE html>
     <nav class="livro-abas-inferior">
         <button class="aba-btn active" onclick="trocarPagina('nova-esq', 'nova-dir', event)">✍️ Escrever Receita</button>
         <button class="aba-btn" onclick="trocarPagina('salvas-esq', 'salvas-dir', event)">📖 Meu Livro (Salvas)</button>
+        <button class="aba-btn" onclick="trocarPagina('wish-esq', 'wish-dir', event)">🛍️ Wishlist</button>
     </nav>
 
 </div>
@@ -282,6 +329,23 @@ l<!DOCTYPE html>
         evt.currentTarget.classList.add('active');
     }
 
+    // --- UTILITÁRIOS DE MOEDA ESTILO BANCO (De trás pra frente) ---
+    function moeda(v) {
+        return Number(v || 0).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' });
+    }
+
+    function extrairNumero(t) {
+        let n = String(t || '').replace(/\D/g, "");
+        return n ? parseFloat(n) / 100 : 0;
+    }
+
+    function formatarMoedaInput(el) {
+        let v = el.value.replace(/\D/g, "");
+        if (v === "") v = "0";
+        el.value = moeda(parseFloat(v) / 100);
+    }
+
+    // --- RECEITAS ---
     let receitasData = JSON.parse(localStorage.getItem('central_receitas')) || [];
 
     function addReceita() {
@@ -389,7 +453,147 @@ l<!DOCTYPE html>
         });
     }
 
+    // Salva as anotações livres da aba Meu Livro automaticamente
+    function salvarAnotacoesChef() {
+        const txt = document.getElementById('anotacoes-chef');
+        if (txt) localStorage.setItem('central_anotacoes_chef', txt.value);
+    }
+
+    function carregarAnotacoesChef() {
+        const txt = document.getElementById('anotacoes-chef');
+        if (txt) txt.value = localStorage.getItem('central_anotacoes_chef') || '';
+    }
+
+    // --- WISHLIST ---
+    let wishData = JSON.parse(localStorage.getItem('central_wishlist')) || [];
+
+    function addWish() {
+        const nome = document.getElementById('wish-nome').value.trim();
+        const valor = extrairNumero(document.getElementById('wish-valor').value);
+        const obs = document.getElementById('wish-obs').value.trim();
+
+        if (!nome) {
+            alert("Escreve o que ela quer comprar primeiro!");
+            return;
+        }
+
+        wishData.push({
+            id: Date.now(),
+            nome,
+            valor,
+            obs,
+            comprado: false
+        });
+
+        document.getElementById('wish-nome').value = '';
+        document.getElementById('wish-valor').value = 'R$ 0,00';
+        document.getElementById('wish-obs').value = '';
+
+        salvarWish();
+    }
+
+    function salvarWish() {
+        localStorage.setItem('central_wishlist', JSON.stringify(wishData));
+        renderWish();
+    }
+
+    function toggleWish(id) {
+        const item = wishData.find(w => w.id === id);
+        if (item) {
+            item.comprado = !item.comprado;
+            salvarWish();
+        }
+    }
+
+    function delWish(id) {
+        if (confirm("Tirar esse item da wishlist?")) {
+            wishData = wishData.filter(w => w.id !== id);
+            salvarWish();
+        }
+    }
+
+    function habilitarEdicaoWish(id) {
+        const cardEl = document.getElementById(`wish-card-${id}`);
+        const w = wishData.find(item => item.id === id);
+        if (!w || !cardEl) return;
+
+        cardEl.innerHTML = `
+            <label style="font-size: 18px; color: #be185d;">Item:</label>
+            <input type="text" id="edit-wish-nome-${id}" value="${w.nome}" style="font-size: 20px; margin-bottom: 10px;">
+            
+            <label style="font-size: 18px; color: #be185d;">Valor:</label>
+            <input type="text" id="edit-wish-valor-${id}" value="${moeda(w.valor)}" oninput="formatarMoedaInput(this)" style="font-size: 20px; margin-bottom: 10px;">
+            
+            <label style="font-size: 18px; color: #be185d;">Observação / Loja:</label>
+            <input type="text" id="edit-wish-obs-${id}" value="${w.obs || ''}" style="font-size: 20px; margin-bottom: 14px;">
+            
+            <div style="display: flex; gap: 12px;">
+                <button style="background: #10b981; flex: 1; font-size: 18px; padding: 14px;" onclick="salvarEdicaoWish(${id})">💾 Salvar</button>
+                <button style="background: #6b7280; flex: 1; font-size: 18px; padding: 14px;" onclick="renderWish()">Cancelar</button>
+            </div>
+        `;
+    }
+
+    function salvarEdicaoWish(id) {
+        const novoNome = document.getElementById(`edit-wish-nome-${id}`).value.trim();
+        const novoValor = extrairNumero(document.getElementById(`edit-wish-valor-${id}`).value);
+        const novaObs = document.getElementById(`edit-wish-obs-${id}`).value.trim();
+
+        if (!novoNome) {
+            alert("O nome do item não pode ficar vazio!");
+            return;
+        }
+
+        const w = wishData.find(item => item.id === id);
+        if (w) {
+            w.nome = novoNome;
+            w.valor = novoValor;
+            w.obs = novaObs;
+            salvarWish();
+        }
+    }
+
+    function renderWish() {
+        const container = document.getElementById('container-wish');
+        const totalEl = document.getElementById('wish-total');
+        if (!container) return;
+
+        container.innerHTML = '';
+        let somaTotal = 0;
+
+        if (wishData.length === 0) {
+            container.innerHTML = '<p style="font-size:18px; color:#888; font-style:italic;">Nenhum item na wishlist ainda. Adiciona na página ao lado!</p>';
+            if (totalEl) totalEl.innerText = moeda(0);
+            return;
+        }
+
+        wishData.forEach(w => {
+            if (!w.comprado) somaTotal += Number(w.valor || 0);
+
+            container.innerHTML += `
+                <div class="wish-card ${w.comprado ? 'wish-comprado' : ''}" id="wish-card-${w.id}">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap: 10px; margin-bottom: 8px;">
+                        <label class="checklist-item" style="margin:0; flex:1; color:#222;">
+                            <input type="checkbox" ${w.comprado ? 'checked' : ''} onchange="toggleWish(${w.id})">
+                            <span class="wish-nome" style="font-weight:bold; font-size:22px;">${w.nome}</span>
+                        </label>
+                        <strong style="color:#be185d; font-size:21px;">${moeda(w.valor)}</strong>
+                    </div>
+                    ${w.obs ? `<div style="font-size:18px; color:#555; margin-bottom:10px;">📌 ${w.obs}</div>` : ''}
+                    <div style="display:flex; justify-content:flex-end; gap: 16px;">
+                        <button style="background:none; color:#2563eb; padding:0; font-size:17px; box-shadow:none; font-weight:bold;" onclick="habilitarEdicaoWish(${w.id})">✏️ Editar</button>
+                        <button style="background:none; color:#ef4444; padding:0; font-size:17px; box-shadow:none; font-weight:bold;" onclick="delWish(${w.id})">🗑️ Apagar</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (totalEl) totalEl.innerText = moeda(somaTotal);
+    }
+
+    carregarAnotacoesChef();
     renderReceitas();
+    renderWish();
 </script>
 </body>
 </html>
