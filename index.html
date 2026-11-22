@@ -61,7 +61,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 50px;
-            padding: 40px 50px;
+            padding: 35px 45px;
             box-shadow: inset 0 0 25px rgba(219, 39, 119, 0.06);
             position: relative;
             overflow-y: auto;
@@ -92,35 +92,35 @@
 
         /* CABEÇALHOS GIGANTES */
         h2 {
-            font-size: 32px;
+            font-size: 30px;
             color: #be185d;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             border-bottom: 4px dashed #f472b6;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             font-weight: 900;
         }
 
         label {
-            font-size: 20px;
+            font-size: 19px;
             color: #be185d;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: block;
             font-weight: bold;
         }
 
-        input {
+        input, select {
             background: #fff;
             border: 3px solid #f472b6;
             color: #222;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border-radius: 12px;
-            font-size: 22px;
-            margin-bottom: 18px;
+            font-size: 20px;
+            margin-bottom: 14px;
             width: 100%;
             outline: none;
             font-weight: bold;
         }
-        input:focus { border-color: var(--rosa-botao); box-shadow: 0 0 12px rgba(236,72,153,0.5); }
+        input:focus, select:focus { border-color: var(--rosa-botao); box-shadow: 0 0 12px rgba(236,72,153,0.5); }
 
         /* --- LINHAS DE CADERNO COM LETRA BEM GRANDE --- */
         .caderno-linhas {
@@ -144,7 +144,7 @@
             background: var(--rosa-botao);
             color: #fff;
             border: none;
-            padding: 18px 28px;
+            padding: 16px 24px;
             border-radius: 12px;
             font-weight: bold;
             font-size: 20px;
@@ -166,6 +166,31 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.06);
         }
 
+        /* Abas de Categorias da Wishlist */
+        .wish-cats-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .wish-cat-btn {
+            background: #fdf2f8;
+            color: #9d174d;
+            border: 2px solid #f472b6;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 17px;
+            font-weight: bold;
+            box-shadow: none;
+        }
+
+        .wish-cat-btn.active {
+            background: #db2777;
+            color: #fff;
+            border-color: #db2777;
+        }
+
         /* Cards da Wishlist */
         .wish-card {
             background: #fff;
@@ -184,6 +209,31 @@
         .wish-comprado .wish-nome {
             text-decoration: line-through;
             color: #888;
+        }
+
+        .wish-badge {
+            display: inline-block;
+            background: #fce7f3;
+            color: #9d174d;
+            border: 1px solid #f472b6;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .wish-link-btn {
+            display: inline-block;
+            background: #fdf2f8;
+            color: #be185d;
+            border: 2px solid #f472b6;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            text-decoration: none;
+            margin-bottom: 10px;
         }
 
         /* ABAS NA PARTE INFERIOR GIGANTES */
@@ -239,7 +289,7 @@
         /* Responsividade */
         @media (max-width: 900px) {
             .livro-container { height: 94vh; }
-            .livro-paginas { grid-template-columns: 1fr; gap: 30px; }
+            .livro-paginas { grid-template-columns: 1fr; gap: 30px; padding: 25px; }
             .livro-paginas::after { display: none; }
             .livro-abas-inferior { height: auto; padding: 10px; gap: 12px; }
             .aba-btn { padding: 12px 22px; font-size: 18px; }
@@ -260,15 +310,15 @@
             <input type="text" id="receita-titulo" placeholder="Nome do Prato (Ex: Strogonoff da Chef)">
             
             <label>Checklist de Ingredientes (Escreva um por linha):</label>
-            <textarea id="receita-ingredientes" class="caderno-linhas" style="height: 250px;" placeholder="- 2 xícaras de trigo&#10;- 3 ovos&#10;- Sal a gosto..."></textarea>
+            <textarea id="receita-ingredientes" class="caderno-linhas" style="height: 240px;" placeholder="- 2 xícaras de trigo&#10;- 3 ovos&#10;- Sal a gosto..."></textarea>
             
-            <button style="width: 100%; margin-top: 18px;" onclick="addReceita()">✨ Salvar Receita no Livro</button>
+            <button style="width: 100%; margin-top: 16px;" onclick="addReceita()">✨ Salvar Receita no Livro</button>
         </div>
 
         <div id="pagina-nova-dir" class="pagina-secao active">
             <h2>📖 Modo de Preparo</h2>
             <label>Passo a Passo Detalhado:</label>
-            <textarea id="receita-modo" class="caderno-linhas" style="height: 400px;" placeholder="Escreva o passo a passo bem grande nas linhas..."></textarea>
+            <textarea id="receita-modo" class="caderno-linhas" style="height: 390px;" placeholder="Escreva o passo a passo bem grande nas linhas..."></textarea>
         </div>
 
         <!-- ABA 2: MEU LIVRO DE RECEITAS SALVAS -->
@@ -280,31 +330,56 @@
         <div id="pagina-salvas-dir" class="pagina-secao">
             <h2>🌸 Anotações & Segredos da Chef</h2>
             <label>Página de Rascunho Livre:</label>
-            <textarea id="anotacoes-chef" class="caderno-linhas" style="height: 400px;" placeholder="Anote dicas extras, temperatura do forno, truques..." oninput="salvarAnotacoesChef()"></textarea>
+            <textarea id="anotacoes-chef" class="caderno-linhas" style="height: 390px;" placeholder="Anote dicas extras, temperatura do forno, truques..." oninput="salvarAnotacoesChef()"></textarea>
         </div>
 
         <!-- ABA 3: WISHLIST DA BLOGUEIRA -->
         <div id="pagina-wish-esq" class="pagina-secao">
             <h2>🛍️ Nova Wish (Lista de Desejos)</h2>
+
+            <label>Categoria:</label>
+            <select id="wish-categoria">
+                <option value="Calçado">👠 Calçado</option>
+                <option value="Cosmético">🧴 Cosmético</option>
+                <option value="Perfume">🌸 Perfume</option>
+                <option value="Maquiagem">💄 Maquiagem</option>
+                <option value="Roupa">👗 Roupa</option>
+                <option value="Outros">✨ Outros</option>
+            </select>
+
             <label>O que você quer comprar?</label>
-            <input type="text" id="wish-nome" placeholder="Ex: Air Fryer Rosa / Perfume / Bolsa">
+            <input type="text" id="wish-nome" placeholder="Ex: Tênis Plataforma / Gloss / Body Splash">
 
             <label>Valor aproximado (estilo banco):</label>
             <input type="text" id="wish-valor" value="R$ 0,00" oninput="formatarMoedaInput(this)">
 
-            <label>Loja ou Observação (opcional):</label>
-            <input type="text" id="wish-obs" placeholder="Ex: Shopee, Amazon, cor lilás...">
+            <label>Link do produto (opcional):</label>
+            <input type="url" id="wish-link" placeholder="https://...">
 
-            <button style="width: 100%; margin-top: 10px;" onclick="addWish()">💖 Colocar na Wishlist</button>
+            <label>Observação / Loja (opcional):</label>
+            <input type="text" id="wish-obs" placeholder="Ex: Shopee, Sephora, cor rosa...">
+
+            <button style="width: 100%; margin-top: 8px;" onclick="addWish()">💖 Colocar na Wishlist</button>
         </div>
 
         <div id="pagina-wish-dir" class="pagina-secao">
             <h2>✨ Minha Wishlist Salva</h2>
+
+            <div class="wish-cats-bar">
+                <button type="button" class="wish-cat-btn active" data-cat="Tudo" onclick="filtrarWishCat('Tudo', this)">💖 Tudo</button>
+                <button type="button" class="wish-cat-btn" data-cat="Calçado" onclick="filtrarWishCat('Calçado', this)">👠 Calçado</button>
+                <button type="button" class="wish-cat-btn" data-cat="Cosmético" onclick="filtrarWishCat('Cosmético', this)">🧴 Cosmético</button>
+                <button type="button" class="wish-cat-btn" data-cat="Perfume" onclick="filtrarWishCat('Perfume', this)">🌸 Perfume</button>
+                <button type="button" class="wish-cat-btn" data-cat="Maquiagem" onclick="filtrarWishCat('Maquiagem', this)">💄 Maquiagem</button>
+                <button type="button" class="wish-cat-btn" data-cat="Roupa" onclick="filtrarWishCat('Roupa', this)">👗 Roupa</button>
+                <button type="button" class="wish-cat-btn" data-cat="Outros" onclick="filtrarWishCat('Outros', this)">✨ Outros</button>
+            </div>
+
             <div style="background: #fdf2f8; border: 2px solid #f472b6; border-radius: 12px; padding: 14px; margin-bottom: 16px; font-size: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <span><strong>Total da Wishlist:</strong></span>
+                <span id="wish-total-label"><strong>Total (Tudo):</strong></span>
                 <strong id="wish-total" style="color: #be185d; font-size: 24px;">R$ 0,00</strong>
             </div>
-            <div id="container-wish" style="max-height: 410px; overflow-y: auto; padding-right: 10px;"></div>
+            <div id="container-wish" style="max-height: 360px; overflow-y: auto; padding-right: 10px;"></div>
         </div>
 
     </div>
@@ -343,6 +418,13 @@
         let v = el.value.replace(/\D/g, "");
         if (v === "") v = "0";
         el.value = moeda(parseFloat(v) / 100);
+    }
+
+    function normalizarLink(url) {
+        const limpo = String(url || '').trim();
+        if (!limpo) return '';
+        if (/^https?:\/\//i.test(limpo)) return limpo;
+        return 'https://' + limpo;
     }
 
     // --- RECEITAS ---
@@ -453,7 +535,6 @@
         });
     }
 
-    // Salva as anotações livres da aba Meu Livro automaticamente
     function salvarAnotacoesChef() {
         const txt = document.getElementById('anotacoes-chef');
         if (txt) localStorage.setItem('central_anotacoes_chef', txt.value);
@@ -464,12 +545,22 @@
         if (txt) txt.value = localStorage.getItem('central_anotacoes_chef') || '';
     }
 
-    // --- WISHLIST ---
+    // --- WISHLIST POR CATEGORIA ---
     let wishData = JSON.parse(localStorage.getItem('central_wishlist')) || [];
+    let categoriaWishAtual = 'Tudo';
+
+    function filtrarWishCat(cat, btnEl) {
+        categoriaWishAtual = cat;
+        document.querySelectorAll('.wish-cat-btn').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
+        renderWish();
+    }
 
     function addWish() {
+        const categoria = document.getElementById('wish-categoria').value || 'Outros';
         const nome = document.getElementById('wish-nome').value.trim();
         const valor = extrairNumero(document.getElementById('wish-valor').value);
+        const link = normalizarLink(document.getElementById('wish-link').value);
         const obs = document.getElementById('wish-obs').value.trim();
 
         if (!nome) {
@@ -479,14 +570,17 @@
 
         wishData.push({
             id: Date.now(),
+            categoria,
             nome,
             valor,
+            link,
             obs,
             comprado: false
         });
 
         document.getElementById('wish-nome').value = '';
         document.getElementById('wish-valor').value = 'R$ 0,00';
+        document.getElementById('wish-link').value = '';
         document.getElementById('wish-obs').value = '';
 
         salvarWish();
@@ -517,12 +611,27 @@
         const w = wishData.find(item => item.id === id);
         if (!w || !cardEl) return;
 
+        const catAtual = w.categoria || 'Outros';
+
         cardEl.innerHTML = `
+            <label style="font-size: 18px; color: #be185d;">Categoria:</label>
+            <select id="edit-wish-cat-${id}" style="font-size: 20px; margin-bottom: 10px;">
+                <option value="Calçado" ${catAtual === 'Calçado' ? 'selected' : ''}>👠 Calçado</option>
+                <option value="Cosmético" ${catAtual === 'Cosmético' ? 'selected' : ''}>🧴 Cosmético</option>
+                <option value="Perfume" ${catAtual === 'Perfume' ? 'selected' : ''}>🌸 Perfume</option>
+                <option value="Maquiagem" ${catAtual === 'Maquiagem' ? 'selected' : ''}>💄 Maquiagem</option>
+                <option value="Roupa" ${catAtual === 'Roupa' ? 'selected' : ''}>👗 Roupa</option>
+                <option value="Outros" ${catAtual === 'Outros' ? 'selected' : ''}>✨ Outros</option>
+            </select>
+
             <label style="font-size: 18px; color: #be185d;">Item:</label>
             <input type="text" id="edit-wish-nome-${id}" value="${w.nome}" style="font-size: 20px; margin-bottom: 10px;">
             
             <label style="font-size: 18px; color: #be185d;">Valor:</label>
             <input type="text" id="edit-wish-valor-${id}" value="${moeda(w.valor)}" oninput="formatarMoedaInput(this)" style="font-size: 20px; margin-bottom: 10px;">
+
+            <label style="font-size: 18px; color: #be185d;">Link do produto:</label>
+            <input type="url" id="edit-wish-link-${id}" value="${w.link || ''}" placeholder="https://..." style="font-size: 20px; margin-bottom: 10px;">
             
             <label style="font-size: 18px; color: #be185d;">Observação / Loja:</label>
             <input type="text" id="edit-wish-obs-${id}" value="${w.obs || ''}" style="font-size: 20px; margin-bottom: 14px;">
@@ -535,8 +644,10 @@
     }
 
     function salvarEdicaoWish(id) {
+        const novaCat = document.getElementById(`edit-wish-cat-${id}`).value || 'Outros';
         const novoNome = document.getElementById(`edit-wish-nome-${id}`).value.trim();
         const novoValor = extrairNumero(document.getElementById(`edit-wish-valor-${id}`).value);
+        const novoLink = normalizarLink(document.getElementById(`edit-wish-link-${id}`).value);
         const novaObs = document.getElementById(`edit-wish-obs-${id}`).value.trim();
 
         if (!novoNome) {
@@ -546,8 +657,10 @@
 
         const w = wishData.find(item => item.id === id);
         if (w) {
+            w.categoria = novaCat;
             w.nome = novoNome;
             w.valor = novoValor;
+            w.link = novoLink;
             w.obs = novaObs;
             salvarWish();
         }
@@ -556,22 +669,34 @@
     function renderWish() {
         const container = document.getElementById('container-wish');
         const totalEl = document.getElementById('wish-total');
+        const totalLabelEl = document.getElementById('wish-total-label');
         if (!container) return;
 
         container.innerHTML = '';
         let somaTotal = 0;
 
-        if (wishData.length === 0) {
-            container.innerHTML = '<p style="font-size:18px; color:#888; font-style:italic;">Nenhum item na wishlist ainda. Adiciona na página ao lado!</p>';
+        const itensFiltrados = wishData.filter(w => {
+            const cat = w.categoria || 'Outros';
+            return categoriaWishAtual === 'Tudo' || cat === categoriaWishAtual;
+        });
+
+        if (totalLabelEl) {
+            totalLabelEl.innerHTML = `<strong>Total (${categoriaWishAtual}):</strong>`;
+        }
+
+        if (itensFiltrados.length === 0) {
+            container.innerHTML = `<p style="font-size:18px; color:#888; font-style:italic;">Nenhum item em "${categoriaWishAtual}" ainda. Adiciona na página ao lado!</p>`;
             if (totalEl) totalEl.innerText = moeda(0);
             return;
         }
 
-        wishData.forEach(w => {
+        itensFiltrados.forEach(w => {
             if (!w.comprado) somaTotal += Number(w.valor || 0);
+            const catLabel = w.categoria || 'Outros';
 
             container.innerHTML += `
                 <div class="wish-card ${w.comprado ? 'wish-comprado' : ''}" id="wish-card-${w.id}">
+                    <span class="wish-badge">${catLabel}</span>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap: 10px; margin-bottom: 8px;">
                         <label class="checklist-item" style="margin:0; flex:1; color:#222;">
                             <input type="checkbox" ${w.comprado ? 'checked' : ''} onchange="toggleWish(${w.id})">
@@ -579,6 +704,7 @@
                         </label>
                         <strong style="color:#be185d; font-size:21px;">${moeda(w.valor)}</strong>
                     </div>
+                    ${w.link ? `<div><a href="${w.link}" target="_blank" rel="noopener noreferrer" class="wish-link-btn">🔗 Abrir Link</a></div>` : ''}
                     ${w.obs ? `<div style="font-size:18px; color:#555; margin-bottom:10px;">📌 ${w.obs}</div>` : ''}
                     <div style="display:flex; justify-content:flex-end; gap: 16px;">
                         <button style="background:none; color:#2563eb; padding:0; font-size:17px; box-shadow:none; font-weight:bold;" onclick="habilitarEdicaoWish(${w.id})">✏️ Editar</button>
